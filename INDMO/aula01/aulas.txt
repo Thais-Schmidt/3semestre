@@ -1,0 +1,4 @@
+aula 1 -
+
+terminal no vs code 
+    npm install --global expo
