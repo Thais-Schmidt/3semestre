@@ -1,4 +1,18 @@
 aula 1 -
 
+instalar o aplicativo expo go no celular
+
 terminal no vs code 
     npm install --global expo
+    npx create-expo-app <appAulas> --> este é o nome do aplicativo
+    npx expo start  //ele da um codigo de barras no terminal para escanear pelo aplicativo expo go no celular
+    npx expo start --tunnel //permite que conectar o aplicativo e o aparelho movel em redes diferentes
+
+depois saimos do terminal e apertamos W 
+
+vao aparecer 4 linhas - 3 amarelas e 1 branca - na linha branca esta a linha para fazer a instalação de
+pacotes para que o app possa ser executado em um navegador web
+
+    npm i react-native-web@~0.19.6, react-dom@18.2.0, @expo/metro-runtime@~3.1.1 // essa linha vai aparecer (sem o npm i)
+    npx expo start //depois de rodar essa linha, vao aparecer duas opçoes no terminal - o link do localhost(para web) e o qr code para o app
+
