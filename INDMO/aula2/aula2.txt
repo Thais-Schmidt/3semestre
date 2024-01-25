@@ -1,0 +1,4 @@
+aula 2 -
+
+Podemos colocar Views-filhas dentro de uma View-mae
+Para colocar varios estilos dentro de uma view -> <View style={[styles.lightGreenBox, styles.border]}>
