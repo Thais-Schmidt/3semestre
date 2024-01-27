@@ -5,3 +5,14 @@ Para colocar varios estilos dentro de uma view -> <View style={[styles.lightGree
 
 url  - só o caminho da pagina
 uri - caminho da pagina + algo
+
+-------------------------------------------------------------------------------------------
+
+fazer uma tela de login, com logo, inputs de entrada de texto e senha e um botão de acessar
+
+cor do fundo - escura
+
+desafio - tornar o campo de senha - tipo senha - asteriscos
+
+
+https://www.flaticon.com/free-icon/atom_3459528?term=react+native&page=1&position=14&origin=search&related_id=3459528

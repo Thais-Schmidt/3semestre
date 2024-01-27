@@ -17,7 +17,8 @@ const saudacao = StyleSheet.create({
     text: {
         marginButton: 10,
         fontSize: 20,
-        color: 'white'
+        color: 'white',
+        marginTop: 20,
     }
 })
 
