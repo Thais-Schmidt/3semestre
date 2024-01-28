@@ -16,3 +16,6 @@ pacotes para que o app possa ser executado em um navegador web
     npm i react-native-web@~0.19.6, react-dom@18.2.0, @expo/metro-runtime@~3.1.1 // essa linha vai aparecer (sem o npm i)
     npx expo start //depois de rodar essa linha, vao aparecer duas opçoes no terminal - o link do localhost(para web) e o qr code para o app
 
+
+npm install react-native-modal // instalando a extensão do modal
+import Modal from 'react-native-modal'; // para poder criar modais dentro o projeto
