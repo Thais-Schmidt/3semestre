@@ -1,7 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, SafeAreaView, Platform, TextInput, Button, Image, Pressable } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, Platform, TextInput, Button, Image, Pressable, ScrollView, TouchableOpacity, setPassword } from 'react-native';
 import Modal from 'react-native-modal';
 import { useState } from 'react';
+import { Ionicons } from '@expo/vector-icons';
 
 //npm install react-native-modal
 
@@ -24,7 +25,7 @@ const CustomAlert = ({ isVisible, onClose }) => {
           <Text style={styles.modalText}>Logado com sucesso!</Text>
           <Image source={happy} style={styles.modalImage} />
           <Text style={styles.modalText}>'Tenha uma ótima experiência!</Text>
-          <Button title="OK!" onPress={onClose} />
+          <Button color="#1D1A39" width="60" title="OK!" onPress={onClose} />
         </View>
       </View>
     </Modal>
@@ -45,7 +46,9 @@ const CustomAlertEsqueciSenha = ({ isVisible, onClose }) => {
           <Image source={yes} style={styles.modalImage} />
           <Text style={styles.modalText}>Vamos fazer seu cadastro!</Text>
 
-          <Button title="OK!" onPress={onClose} />
+
+
+          <Button color="#1D1A39" style={styles.btnOK} title="OK!" onPress={onClose} />
 
         </View>
       </View>
@@ -54,6 +57,8 @@ const CustomAlertEsqueciSenha = ({ isVisible, onClose }) => {
 };
 
 export default function App() {
+
+
 
   const [isLoginModalVisible, setLoginModalVisible] = useState(false);
   const [isEsqueciSenhaModalVisible, setEsqueciSenhaModalVisible] = useState(false);
@@ -71,12 +76,20 @@ export default function App() {
     setEsqueciSenhaModalVisible(false);
   };
 
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
 
   return (
-
     <SafeAreaView style={[styles.androidSafeArea]}>
 
-      <View style={[styles.container]}>
+      <ScrollView>
+
+        <View style={[styles.container]}>
 
           <View style={{ display: 'flex', flexDirection: 'row', marginBottom: 5 }}>
 
@@ -108,12 +121,26 @@ export default function App() {
 
               </View>
 
-              <TextInput
-                placeholder='Digite sua senha'
-                style={styles.entradaTexto}
-                secureTextEntry={true}
-                password={true}
-              ></TextInput>
+              <View style={styles.passwordContainer}>
+
+                <TextInput
+                  placeholder='Digite sua senha'
+                  style={styles.entradaTexto}
+                  secureTextEntry={!showPassword}
+                  onChangeText={(text) => setPassword(text)}
+                  value={password}
+                ></TextInput>
+
+                <TouchableOpacity onPress={toggleShowPassword} style={styles.showPasswordIcon}>
+                  <Ionicons
+                    name={showPassword ? 'eye' : 'eye-off'}
+                    size={25}
+                    paddingLeft={40}
+                    color="black"
+                  />
+                </TouchableOpacity>
+
+              </View>
 
               <Pressable
                 style={({ pressed }) => [
@@ -167,45 +194,45 @@ export default function App() {
 
             <CustomAlertEsqueciSenha isVisible={isEsqueciSenhaModalVisible} onClose={closeModal} />
 
-            <Text style={{ color: '#a42527', fontSize: 17, textDecorationLine: 'underline', fontWeight: 'bold' }}>Esqueci a senha</Text>
-
-            <StatusBar style="auto" />
+            <Text style={{ color: '#a42527', fontSize: 17, textDecorationLine: 'underline', fontWeight: 'bold', paddingBottom: 20 }}>Esqueci a senha</Text>
 
           </View>
 
         </View>
+        <StatusBar style="auto" />
+
+
+
+      </ScrollView>
 
     </SafeAreaView >
-
   );
 
 }
 
 const styles = StyleSheet.create({
   androidSafeArea: {
-    flex: 1,
     paddingTop: Platform.OS === 'android' ? 40 : 0,
   },
   container: {
-    display: 'fixed',
     flex: 1,
-    height: 'auto',
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#1D1A39',
+    paddingTop: 150,
+    paddingBottom: 27,
   },
   bloco: {
     display: 'fixed',
     width: '70%',
-    maxHeight: '40%',
-    minHeight: '40%',
+    height: '47%',
     borderRadius: 20,
     backgroundColor: '#FAE5E2',
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 20,
-    paddingTop: 30,
+    marginTop: 30,
+    paddingTop: 60,
   },
   label: {
     fontSize: 17,
@@ -231,6 +258,14 @@ const styles = StyleSheet.create({
   outsideText: {
     color: 'white',
     fontSize: 17
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderColor: 'gray',
+    marginBottom: 20,
+    borderRadius: 5,
+    backgroundColor: '#DFB6B2',
   },
   modalContainer: {
     flex: 1,
