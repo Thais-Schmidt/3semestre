@@ -1,4 +1,4 @@
-aula 1 -
+Aula 1 -
 
 instalar o aplicativo expo go no celular
 
@@ -19,3 +19,15 @@ pacotes para que o app possa ser executado em um navegador web
 
 npm install react-native-modal // instalando a extensão do modal
 import Modal from 'react-native-modal'; // para poder criar modais dentro o projeto
+
+--------------------------------------  aula 4
+Navegar entre paginas
+
+npx expo install @react-navigation/native    
+npx expo install react-native-screens react-native-safe-area-context 
+npx expo install @react-navigation/native-stack 
+
+*Olhar aula4 para ver melhor como funciona a navegação entre paginas
+
+-------------------------------------- aula 5
+
