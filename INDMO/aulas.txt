@@ -29,5 +29,6 @@ npx expo install @react-navigation/native-stack
 
 *Olhar aula4 para ver melhor como funciona a navegação entre paginas
 
--------------------------------------- aula 5
+-------------------------------------- aula ????
 
+npm install @react-navigation/bottom-tabs       botoes de navegação na parte inferior da tela
