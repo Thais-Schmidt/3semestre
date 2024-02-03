@@ -32,3 +32,6 @@ npx expo install @react-navigation/native-stack
 -------------------------------------- aula ????
 
 npm install @react-navigation/bottom-tabs       botoes de navegação na parte inferior da tela
+
+-------------------onde abre os tres itens no topo, inserir um logo e um titulo
+criar um componente novo e renderizar 
