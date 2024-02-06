@@ -1,13 +1,27 @@
 import 'react-native-gesture-handler';
-import { NavigationContainer  } from "@react-navigation/native";
-import Routes from './src/routes/index';
+import { NavigationContainer } from "@react-navigation/native";
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-export default function App(){
+import Routes from './src/routes/index';
+import { StatusBar } from 'react-native';
+
+export default function App() {
 
   return (
-    <NavigationContainer>
-      <Routes/>
-    </NavigationContainer>
+
+    <SafeAreaProvider >
+
+      <StatusBar barStyle={"auto"} />
+
+      <NavigationContainer> {/*   */}
+
+        <Routes /> {/*  etsamos renderizando o index da pasta routes*/}
+
+      </NavigationContainer>
+
+    </SafeAreaProvider>
+
   )
+
 }
 
