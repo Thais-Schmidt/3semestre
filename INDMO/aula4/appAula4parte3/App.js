@@ -8,17 +8,12 @@ import Home from './src/pages/Home';
 import Sobre from './src/pages/Sobre';
 import Contato from './src/pages/Contato';
 
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
 const Tab = createBottomTabNavigator();
 
 export default function App() {
 
   return (
     <NavigationContainer>
-
-      
-
       <Tab.Navigator
         screenOptions={{
           tabBarActiveTintColor: '#1c3604',

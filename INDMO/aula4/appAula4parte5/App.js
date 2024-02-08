@@ -13,9 +13,9 @@ export default function App() {
 
       <StatusBar barStyle={"auto"} />
 
-      <NavigationContainer> {/*   */}
-
-        <Routes /> {/*  etsamos renderizando o index da pasta routes*/}
+      <NavigationContainer>
+ 
+        <Routes />
 
       </NavigationContainer>
 

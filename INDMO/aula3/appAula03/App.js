@@ -8,7 +8,6 @@ import Feather from '@expo/vector-icons/Feather'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 
 
-
 export default function App() {
   return (
 
