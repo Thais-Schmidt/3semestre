@@ -20,12 +20,12 @@ app.listen(8080, () => {
     console.log("Servidor rodando na porta 8080");
 });
 
-// app.get ("/consultar", (req,res) => {
-//     //Destructuring - Desestruturando dados provenientes do back
-//     let { nome, matricula } = req.query;
-//     console.log(nome, matricula); 
-//     res.status(200).send("Realizzando a listagem dos dados").end();
-// });
+app.get ("/consultar", (req,res) => {
+    //Destructuring - Desestruturando dados provenientes do back
+    let { nome, matricula } = req.query;
+    console.log(nome, matricula); 
+    res.status(200).send("Realizzando a listagem dos dados").end();
+});
 
 const cursos = ['React  Native', 'Javascript', 'NodeJS'];
 

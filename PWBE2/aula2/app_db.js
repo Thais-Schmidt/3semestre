@@ -6,15 +6,8 @@ const app = express();
 
 app.use(express.json());
 
-
 app.listen(3000, () => {
     console.log("Servidor rodando na porta 3000");
-});
-
-//Retorna todos os clientes existentes na tabela clientes
-app.get("/clientes", async (req, res) => {
-    const clientes = await selectCliente();
-    return res.json(clientes);
 });
 
 //Banco de dados
@@ -34,6 +27,12 @@ async function connect() {
     global.connection = conn;
     return conn;
 };
+
+//Retorna todos os clientes existentes na tabela clientes
+app.get("/clientes", async (req, res) => {
+    const clientes = await selectCliente();
+    return res.json(clientes);
+});
 
 //seleciona todos os registros da tabela clientes
 async function selectCliente() {
