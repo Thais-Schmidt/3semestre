@@ -41,6 +41,8 @@ async function selectCliente() {
     return rows;
 };
 
+//
+
 //rota para retornar um cliente pelo ID
 app.get("/clientes/:id", async (req, res) => {
     const { id } = req.params;
@@ -56,6 +58,8 @@ async function selectOneCliente(id) {
     const [rows] = await conn.query(sql, values);
     return rows;
 };
+
+//
 
 //create - cria um novo cliente
 app.post('/clientes', async(req,res) => {
@@ -73,6 +77,8 @@ async function insertCliente(cliente){
     const values  = [cliente.nome, cliente.idade];
     return await conn.query(sql, values);
 };
+
+//
 
 //atualizando um cliente 
 app.put('/clientes/:id', async (req,res) => {
@@ -97,6 +103,8 @@ async function updateCliente(id, cliente) {
     //     "idade": 45
     // }
 };
+
+//
 
 //excluindo um cliente
 app.delete('/clientes/:id', async (req,res) => {
