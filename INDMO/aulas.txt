@@ -37,3 +37,10 @@ npm install @react-navigation/bottom-tabs       botoes de navegação na parte i
 criar um componente novo e renderizar 
 
 npm install @react-navigation/bottom-tabs
+
+----------------------------------------aula ja nao sei mais
+
+no cmd  - ipconfig
+
+Endereço IPv4. . . . . . . .  . . . . . . . : 10.0.0.191
+
