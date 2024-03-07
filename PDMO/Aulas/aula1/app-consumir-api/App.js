@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
 
 import api from './src/services/api/api';
 
 export default function App() {
 
   const [cliente, setCliente] = useState([]);
+  const [IDCli, setIDCli] = useState(0);
 
-  const getCliente = async () => {
+  const getCliente = async (id) => {
 
     try {
 
-      const { data } = await api.get(`/clientes/1`);
+      const { data } = await api.get(`/clientes/${id}`);
       console.log(data);
       setCliente(data);
 
@@ -28,9 +29,17 @@ export default function App() {
 
     <View style={styles.container}>
 
+      <TextInput
+        placeholder='Digite o ID desejado'
+        style={styles.entradaTexto}
+        keyboardType='numeric'
+        onChangeText={setIDCli}
+        value={IDCli}
+      />
+
       <TouchableOpacity
 
-        onPress={() => getCliente()}
+        onPress={() => getCliente(IDCli)}
         style={styles.btn}
 
       >
@@ -67,5 +76,16 @@ const styles = StyleSheet.create({
     width: '50%',
     height: 40,
     borderRadius: 4,
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  entradaTexto: {
+    backgroundColor: '#e2d4e0',
+    height: 37,
+    width: 150,
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    borderRadius: 3
   }
 });
