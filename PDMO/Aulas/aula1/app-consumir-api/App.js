@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert, } from 'react-native';
 
 import api from './src/services/api/api';
 
@@ -8,18 +8,66 @@ export default function App() {
 
   const [cliente, setCliente] = useState([]);
   const [IDCli, setIDCli] = useState(0);
+  const [showAlert, setShowAlert] = useState(false);
 
   const getCliente = async (id) => {
 
     try {
 
-      const { data } = await api.get(`/clientes/${id}`);
-      console.log(data);
-      setCliente(data);
+      if (id > 0) {
+
+        const response = await api.get(`/clientes/${id}`)
+
+          .catch(function (error) {
+
+            if (error.response) {
+
+              console.log(error.response.data);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+
+            } else if (error.request) {
+
+              if ((error.request._response).includes('Failed')) {
+                console.log('Erro ao conectar a API.');
+              }
+
+            } else {
+
+              console.log('Erro', error.message);
+
+            }
+
+          });
+
+        if (response != undefined) {
+
+          if (response.data.length === 0) {
+
+            setCliente([])
+            setShowAlert(true)
+
+          } else {
+
+            setCliente(response.data);
+
+          }
+
+        }
+
+        console.log(response.data);
+        setCliente(response.data);
+        setShowAlert(true);
+
+      } else {
+
+        setCliente([]);
+
+      }
 
     } catch (error) {
 
-      console.error(error);
+      console.error(error)
 
     }
 
@@ -48,11 +96,32 @@ export default function App() {
 
       </TouchableOpacity>
 
-      <Text>ID do cliente:{cliente[0]?.id}</Text>
+      <Text>ID:</Text>
+      <TextInput
+        style={styles.box}
+        value={cliente[0]?.id.toString()}
+      />
 
-      <Text>Nome do cliente:{cliente[0]?.nome}</Text>
+      <Text>Nome:</Text>
+      <TextInput
+        style={styles.box}
+        value={cliente[0]?.nome}
+      />
 
-      <Text>Idade do cliente:{cliente[0]?.idade}</Text>
+      <Text>Idade:</Text>
+      <TextInput
+        style={styles.box}
+        value={cliente[0]?.idade.toString()}
+      />
+
+      {
+        showAlert &&
+        (Alert.alert('Informação', 'Registro não foi encontrado na base de dados.',
+          [
+            { text: 'OK', onPress: () => setShowAlert(false) }
+          ])
+        )
+      }
 
       <StatusBar style="auto" />
 
@@ -86,6 +155,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     textAlign: 'center',
-    borderRadius: 3
+  },
+  box: {
+    backgroundColor: '#c4c7d7',
+    height: 37,
+    width: 120,
+    marginBottom: 20,
+    textAlign: 'center',
+    borderRadius: 12,
   }
 });
