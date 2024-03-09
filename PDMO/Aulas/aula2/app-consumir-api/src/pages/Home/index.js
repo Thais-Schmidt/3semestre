@@ -1,0 +1,47 @@
+import React, { useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert, Button, SafeAreaView, } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+
+
+
+export default function App() {
+
+    const navigation = useNavigation();
+    const navegaPesquisaID = () => {
+        navigation.navigate('DetalhesCliente');
+    }
+
+    return (
+
+        <SafeAreaView style={styles.container}>
+
+                <Text style={styles.text}>
+                    Bem vindo coleguinha
+                </Text>
+
+                <Button
+                    title='Pesquisar por ID'
+                    onPress={navegaPesquisaID}
+                />
+
+
+        </SafeAreaView>
+
+    )
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fffdf6',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    text: {
+        fontWeight: 'bold',
+        marginBottom: 20,
+        
+    }
+
+});

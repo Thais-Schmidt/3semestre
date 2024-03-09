@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert, } from 'react-native';
 
-import api from './src/services/api/api';
+import api from '../../services/api/api';
 
 export default function App() {
 
