@@ -6,10 +6,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Home from './src/pages/Home';
 import DetalhesCliente from './src/pages/DetalhesCliente';
+import NovoCliente from './src/pages/NovoCliente';
 
 const Stack = createNativeStackNavigator();
 
-  
+
 export default function App() {
   return (
 
@@ -25,8 +26,19 @@ export default function App() {
           />
 
           <Stack.Screen
-            name= 'DetalhesCliente'
+            name='DetalhesCliente'
             component={DetalhesCliente}
+            options={{
+              title: 'Detalhes Cliente'
+            }}
+          />
+
+          <Stack.Screen
+            name='NovoCliente'
+            component={NovoCliente}
+            options={{
+              title: 'Novo Cliente'
+            }}
           />
 
         </Stack.Navigator>

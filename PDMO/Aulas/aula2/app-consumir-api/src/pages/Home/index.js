@@ -8,22 +8,32 @@ import { useNavigation } from '@react-navigation/native';
 export default function App() {
 
     const navigation = useNavigation();
+
     const navegaPesquisaID = () => {
         navigation.navigate('DetalhesCliente');
-    }
+    };
+
+    const navegaNovoCliente = () => {
+        navigation.navigate('NovoCiente')
+    };
 
     return (
 
         <SafeAreaView style={styles.container}>
 
-                <Text style={styles.text}>
-                    Bem vindo coleguinha
-                </Text>
+            <Text style={styles.text}>
+                Bem vindo coleguinha
+            </Text>
 
-                <Button
-                    title='Pesquisar por ID'
-                    onPress={navegaPesquisaID}
-                />
+            <Button
+                title='Pesquisar por ID'
+                onPress={navegaPesquisaID}
+            />
+
+            <Button
+                title='Cadastro novo cliente'
+                onPress={navegaNovoCliente}
+            />
 
 
         </SafeAreaView>
@@ -41,7 +51,7 @@ const styles = StyleSheet.create({
     text: {
         fontWeight: 'bold',
         marginBottom: 20,
-        
+
     }
 
 });
