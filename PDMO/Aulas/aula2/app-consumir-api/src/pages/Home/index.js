@@ -14,7 +14,7 @@ export default function App() {
     };
 
     const navegaNovoCliente = () => {
-        navigation.navigate('NovoCiente')
+        navigation.navigate('NovoCliente')
     };
 
     return (
