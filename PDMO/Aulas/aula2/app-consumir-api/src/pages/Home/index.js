@@ -17,6 +17,10 @@ export default function App() {
         navigation.navigate('NovoCliente')
     };
 
+    const navegaTodosClientes = () => {
+        navigation.navigate('TodosClientes')
+    };
+
     return (
 
         <SafeAreaView style={styles.container}>
@@ -33,6 +37,11 @@ export default function App() {
             <Button
                 title='Cadastro novo cliente'
                 onPress={navegaNovoCliente}
+            />
+
+            <Button
+                title='Exibir todos os clientes'
+                onPress={navegaTodosClientes}
             />
 
 

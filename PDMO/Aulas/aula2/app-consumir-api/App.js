@@ -1,12 +1,14 @@
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import Home from './src/pages/Home';
 import DetalhesCliente from './src/pages/DetalhesCliente';
 import NovoCliente from './src/pages/NovoCliente';
+import TodosClientes from './src/pages/TodosClientes';
 
 const Stack = createNativeStackNavigator();
 
@@ -14,7 +16,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
 
-    <SafeAreaProvider>
+    <SafeAreaProvider styles={styles.container}>
 
       <NavigationContainer>
 
@@ -38,6 +40,14 @@ export default function App() {
             component={NovoCliente}
             options={{
               title: 'Novo Cliente'
+            }}
+          />
+
+          <Stack.Screen
+            name='TodosClientes'
+            component={TodosClientes}
+            options={{
+              title: 'Exibir todos os Clientes'
             }}
           />
 

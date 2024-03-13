@@ -19,10 +19,11 @@ export default function App() {
     const salvarCliente = async () => {
         try {
             if (nome == '' || nome == null) {
-                setAlertMessage('Preencha corretamente o nome.');
+                setAlertMessage('Preencha corretamente o nome:');
                 exibeAlert();
                 return;
-            } if(isNaN(idade)){
+            }
+            if (isNaN(idade)) {
                 setAlertMessage('O valor digitado para idade esta incorreto.');
                 exibeAlert();
                 return;
@@ -33,7 +34,7 @@ export default function App() {
                 return;
             }
 
-            const response = await api.post('/cliente', { nome: nome, idade: Number(idade) })
+            const response = await api.post('/clientes', { nome: nome, idade: Number(idade) })
                 .catch(function (error) {
                     if (error.response) {
                         console.log(error.response.data);
@@ -41,7 +42,7 @@ export default function App() {
                         console.log(error.response.headers);
                     } else if (error.request) {
                         if ((error.request._response).includes('Failed')) {
-                            console.log('Erro ao conecta coma API');
+                            console.log('Erro ao conectar com a API');
                         }
                     } else {
                         console.log(error.message);
@@ -49,8 +50,8 @@ export default function App() {
                     console.log(error.config)
                 });
 
-            if (response != undefined ) {
-                if(response.data[0].affectRows == 1) {
+            if (response != undefined) {
+                if (response.data[0].affectedRows == 1) {
                     setAlertMessage('Cliente cadastrado com sucesso!');
                     exibeAlert();
                     setNome('');
@@ -69,39 +70,39 @@ export default function App() {
         <SafeAreaView style={styles.container}>
 
             <View style={styles.cardTitle}>
+
                 <Text style={styles.title}>
                     Preencha os campos abaixo:
                 </Text>
+
             </View>
 
             <View>
+
                 <Text>Nome do cliente:</Text>
                 <TextInput
-                    style={styles.input}
+                    style={styles.caixaDeTexto}
                     value={nome}
-                    onChange={setNome}
+                    onChangeText={setNome}
                 />
+
             </View>
 
             <View>
                 <Text>Idade do cliente:</Text>
                 <TextInput
-                    style={styles.input}
+                    style={styles.caixaDeTexto}
                     value={idade.toString()} //recupera o texto 
-                    onChange={setIdade} //recebe e armazena o que foi escrito no input 
+                    onChangeText={setIdade} //recebe e armazena o que foi escrito no input 
                 />
             </View>
 
             <TouchableOpacity
 
-                onPress={() => {
-                    salvarCliente()
-                }}
+                onPress={() => { salvarCliente() }}
                 style={styles.alingVH}>
 
-                <Text>
-                    Salvar
-                </Text>
+                <Text style={{ backgroundColor:'black', color: 'pink', fontWeight: 'bold', fontSize: 20 }}> Salvar </Text>
 
             </TouchableOpacity>
 
@@ -114,6 +115,8 @@ export default function App() {
                     ]
                 )
             )}
+
+            <StatusBar style="auto" />
 
         </SafeAreaView>
     )
@@ -138,12 +141,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         fontSize: 20
     },
-    input: {
-        alignItems: 'center',
-        fontSize: 30,
+    caixaDeTexto: {
         borderWidth: 1,
-        width: '80%',
+        borderColor: 'black',
+        borderRadius: 5,
         padding: 5,
+        width: 200
     },
     alingVH: {
         alignItems: 'center',
