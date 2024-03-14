@@ -2,13 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert, Button, FlatList } from 'react-native';
 import api from '../../services/api/api';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 
 export default function TodosClientes() {
+
+    const navigation = useNavigation();
+
+    const route = useRoute();
 
     let [flatListClientes, setflatListClientes] = useState([]);
 
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
+    const [status, setStatus] = useState(false);
+
+    const navegaEditar = (pId, pNome, pIdade) => {
+        navigation.navigate('EditarCliente', {id: pId, nome:pNome, idade:pIdade})
+    }
 
     const exibeAlert = () => {
         setShowAlert(true)
@@ -55,12 +66,23 @@ export default function TodosClientes() {
     }
 
     useEffect(() => {
+        if(route.params?.status) {
+            setStatus(route.params.status)
+        } 
+    }, [route.params?.status]);
+
+    useEffect(() => {
         listarClientes();
-    } , [] )
+    }, [status]);
+
+    // useFocusEffect(() => {
+    //     listarClientes();
+    // });
 
     let listViewItem = (item) => {
-        console.log(item)
+        //console.log(item)
         return (
+
             <View style={styles.modeloCard}>
 
                 <Text style={styles.textHeader}>ID:</Text>
@@ -72,7 +94,39 @@ export default function TodosClientes() {
                 <Text style={styles.textHeader}>Idade:</Text>
                 <Text style={styles.textValue}>{item.idade}</Text>
 
+
+                <View style={styles.containerButton}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            navegaEditar(item.id, item.nome, item.idade)
+                        }}
+                    >
+                        <Text>
+                            <FontAwesome5
+                                name='edit'
+                                color='#741b47'
+                                size= {24}
+                            />
+                        </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        onPress={() => {
+                            console.log('funcionando')
+                        }}
+                    >
+                        <Text>
+                            <FontAwesome5
+                                name='trash'
+                                color='#741b47'
+                                size= {24}
+                            />
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+
             </View>
+
         )
     }
 
@@ -86,19 +140,19 @@ export default function TodosClientes() {
                     contentContainerStyle={{ paddingHorizontal: 20 }}
                     data={flatListClientes}
                     keyExtractor={(item, index) => index.toString()}
-                    renderItem={({item}) => listViewItem(item)}
+                    renderItem={({ item }) => listViewItem(item)}
                 />
             </View>
 
             {showAlert && (
-                    Alert.alert(
-                        'Atenção',
-                        alertMessage,
-                        [
-                            { text: 'OK', onPress: () => setAlertMessage(false) }
-                        ]
-                    )
+                Alert.alert(
+                    'Atenção',
+                    alertMessage,
+                    [
+                        { text: 'OK', onPress: () => setAlertMessage(false) }
+                    ]
                 )
+            )
             }
 
         </View >
@@ -106,28 +160,31 @@ export default function TodosClientes() {
 }
 
 const styles = StyleSheet.create({
-    container: {
+    containerButton: {
         flex: 1,
-        backgroundColor: '#fffdf6',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 10
+        justifyContent: 'flex-end',
+        flexDirection: 'row',
+        gap: 15
     },
     modeloCard: {
-        backgroundColor: '#c4f092',
+        backgroundColor: '#e2d4e0',
         marginBottom: 30,
         padding: 15,
         borderRadius: 10,
-        elevation: 8
+        elevation: 8,
     },
     textHeader: {
-        color: '#111',
+        color: '#741b47',
         fontSize: 12,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontSize: 18,
+
     },
     textValue: {
         color: 'black',
-        fontSize: 18
+        fontSize: 18,
+        marginBottom: 5,
+        borderRadius: 4,
     }
 
 });
