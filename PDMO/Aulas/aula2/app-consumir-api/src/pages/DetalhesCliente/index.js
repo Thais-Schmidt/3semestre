@@ -135,17 +135,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   btn: {
-    backgroundColor: '#7c7e9d',
+    backgroundColor: '#a64d79',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '50%',
+    width: '40%',
     height: 40,
     borderRadius: 4,
     marginTop: 20,
     marginBottom: 20,
   },
   entradaTexto: {
-    backgroundColor: '#e2d4e0',
+    backgroundColor: '#fdeef4',
     height: 37,
     width: 150,
     justifyContent: 'center',
@@ -153,11 +153,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   box: {
-    backgroundColor: '#c4c7d7',
+    backgroundColor: '#ead1dc',
     height: 37,
-    width: 120,
+    width: 220,
     marginBottom: 20,
     textAlign: 'center',
-    borderRadius: 12,
+    borderRadius: 5,
   }
 });

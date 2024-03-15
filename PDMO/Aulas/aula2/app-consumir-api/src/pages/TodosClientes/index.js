@@ -18,7 +18,7 @@ export default function TodosClientes() {
     const [status, setStatus] = useState(false);
 
     const navegaEditar = (pId, pNome, pIdade) => {
-        navigation.navigate('EditarCliente', {id: pId, nome:pNome, idade:pIdade})
+        navigation.navigate('EditarCliente', { id: pId, nome: pNome, idade: pIdade })
     }
 
     const exibeAlert = () => {
@@ -65,19 +65,62 @@ export default function TodosClientes() {
         }
     }
 
-    useEffect(() => {
-        if(route.params?.status) {
-            setStatus(route.params.status)
-        } 
-    }, [route.params?.status]);
+    const deletarClientes = async (id) => {
+        try {
+            const response = await api.delete(`/clientes/${id}`)
+                .catch(function (error) {
+                    if (error.response) {
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                    } else if (error.request) {
+                        if ((error.request._response).includes('Failed')) {
+                            console.log('Erro ao conecta com a API');
+                        }
+                    } else {
+                        console.log(error.message);
+                    }
+                    console.log(error.config)
+                });
 
-    useEffect(() => {
-        listarClientes();
-    }, [status]);
+            if (response != undefined) {
+                if (response.data.length > 0) {
+                    // console.log(response.data)
+                    let temp = [];
+                    for (let i = 0; i < response.data.length; i++) {
+                        temp.push(response.data[i]);        
+                    }
+                    setflatListClientes(temp);
+                    temp = [];
+                    setAlertMessage('Registro excluido com sucesso!')
+                    exibeAlert();
+                } else {
+                    setAlertMessage('Nenhum registro foi localizado!')
+                    exibeAlert();
+                    return;
+                }
+            }
 
-    // useFocusEffect(() => {
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    // useEffect(() => {
+    //     if(route.params?.status) {
+    //         setStatus(route.params.status)
+    //     } 
+    // }, [route.params?.status]);
+
+    // useEffect(() => {
     //     listarClientes();
-    // });
+    // }, [status]);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            listarClientes();
+        }, [])
+    );
 
     let listViewItem = (item) => {
         //console.log(item)
@@ -105,21 +148,35 @@ export default function TodosClientes() {
                             <FontAwesome5
                                 name='edit'
                                 color='#741b47'
-                                size= {24}
+                                size={24}
                             />
                         </Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         onPress={() => {
-                            console.log('funcionando')
+                            Alert.alert(
+                                'Atenção!',
+                                'Deseja realmente excluir esse registro?',
+                                [
+                                    {
+                                        text: 'Sim',
+                                        onPress: () => { deletarClientes(item.id) }                      
+                                        
+                                    },
+                                    {
+                                        text: 'Cancelar',
+                                        onPress: () => { return }
+                                    }
+                                ]
+                            )
                         }}
                     >
                         <Text>
                             <FontAwesome5
-                                name='trash'
+                                name='trash-alt'
                                 color='#741b47'
-                                size= {24}
+                                size={24}
                             />
                         </Text>
                     </TouchableOpacity>

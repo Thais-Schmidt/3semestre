@@ -69,17 +69,13 @@ export default function App() {
     return (
         <SafeAreaView style={styles.container}>
 
-            <View style={styles.cardTitle}>
-
-                <Text style={styles.title}>
-                    Preencha os campos abaixo:
-                </Text>
-
-            </View>
+            <Text style={styles.title}>
+                Preencha os campos abaixo:
+            </Text>
 
             <View>
 
-                <Text>Nome do cliente:</Text>
+                <Text style={styles.subtitle} >Nome do cliente:</Text>
                 <TextInput
                     style={styles.caixaDeTexto}
                     value={nome}
@@ -89,7 +85,7 @@ export default function App() {
             </View>
 
             <View>
-                <Text>Idade do cliente:</Text>
+                <Text style={styles.subtitle} >Idade do cliente:</Text>
                 <TextInput
                     style={styles.caixaDeTexto}
                     value={idade.toString()} //recupera o texto 
@@ -102,7 +98,7 @@ export default function App() {
                 onPress={() => { salvarCliente() }}
                 style={styles.alingVH}>
 
-                <Text style={{ backgroundColor:'black', color: 'pink', fontWeight: 'bold', fontSize: 20 }}> Salvar </Text>
+                <Text style={styles.btnSalvar}> Salvar </Text>
 
             </TouchableOpacity>
 
@@ -131,26 +127,40 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         gap: 10
     },
-    cardTitle: {
-        borderWidth: 1,
-        borderColor: 'black',
-        borderRadius: 5,
-        padding: 5
-    },
     title: {
-        alignItems: 'center',
-        fontSize: 20
+        fontWeight: 'bold',
+        fontSize: 26,
+        color: '#a64d79',
+        marginBottom: 10
     },
     caixaDeTexto: {
         borderWidth: 1,
         borderColor: 'black',
         borderRadius: 5,
         padding: 5,
-        width: 200
+        marginBottom: 10,
+        width: 200,
+        textAlign: 'center',
     },
     alingVH: {
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    btnSalvar: {
+        backgroundColor: '#a64d79',
+        color: '#fafafa',
+        height: 40,
+        width: 120,
+        textAlign: 'center',
+        paddingTop: 6,
+        fontSize: 20,
+        borderRadius: 6
+    },
+    subtitle: {
+        fontWeight: 'bold',
+        fontSize: 19,
+        textAlign: 'center',
+        color: '#4c1130'
     }
 
 });

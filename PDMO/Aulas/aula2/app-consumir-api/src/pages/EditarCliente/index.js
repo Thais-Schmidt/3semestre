@@ -55,11 +55,11 @@ export default function EditarCliente() {
 
             if (response != undefined) {
                 if (response.data[0].changedRows == 1) {
-                    setAlertMessage('Cliente alterado com sucesso!');
-                    exibeAlert();
                     setTxtId('');
                     setTxtNome('');
                     setTxtIdade('');
+                    setAlertMessage('Cliente alterado com sucesso!');
+                    exibeAlert();
                 } else {
                     console.log("O registro não foi atualizado. Tente novamente.")
                 }
