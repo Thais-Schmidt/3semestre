@@ -52,8 +52,10 @@ const clienteController = {
     deletaGente: async (req, res) => {
         try {
             const { id } = req.params;
-            var result = await clienteModel.deletaGente(id);
+            //var result = await clienteModel.deletaGente(id);
             return res.status(200).json({ message: `Registro excluido com sucesso!` });
+            //setRefresh(prevState => !prevState);
+            //exibeAlert();
         } catch (error) {
             throw error;
         }

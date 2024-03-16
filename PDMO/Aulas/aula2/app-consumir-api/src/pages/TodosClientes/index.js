@@ -8,7 +8,6 @@ import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/nativ
 export default function TodosClientes() {
 
     const navigation = useNavigation();
-
     const route = useRoute();
 
     let [flatListClientes, setflatListClientes] = useState([]);
@@ -16,6 +15,9 @@ export default function TodosClientes() {
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [status, setStatus] = useState(false);
+    const [refresh, setRefresh] = useState(false);
+
+    const [isUpdate, setisUpdate] = useState(false); //Variavel de controle
 
     const navegaEditar = (pId, pNome, pIdade) => {
         navigation.navigate('EditarCliente', { id: pId, nome: pNome, idade: pIdade })
@@ -84,20 +86,13 @@ export default function TodosClientes() {
                 });
 
             if (response != undefined) {
-                if (response.data.length > 0) {
-                    // console.log(response.data)
-                    let temp = [];
-                    for (let i = 0; i < response.data.length; i++) {
-                        temp.push(response.data[i]);        
-                    }
-                    setflatListClientes(temp);
-                    temp = [];
+                if (response.data[0].affectedRows > 0) {
+                    setRefresh(prevState => !prevState);
                     setAlertMessage('Registro excluido com sucesso!')
                     exibeAlert();
                 } else {
                     setAlertMessage('Nenhum registro foi localizado!')
                     exibeAlert();
-                    return;
                 }
             }
 
@@ -119,7 +114,7 @@ export default function TodosClientes() {
     useFocusEffect(
         React.useCallback(() => {
             listarClientes();
-        }, [])
+        }, [refresh])
     );
 
     let listViewItem = (item) => {
@@ -161,8 +156,8 @@ export default function TodosClientes() {
                                 [
                                     {
                                         text: 'Sim',
-                                        onPress: () => { deletarClientes(item.id) }                      
-                                        
+                                        onPress: () => { deletarClientes(item.id) }
+
                                     },
                                     {
                                         text: 'Cancelar',
