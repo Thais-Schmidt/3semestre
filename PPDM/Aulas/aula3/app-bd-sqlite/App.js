@@ -65,7 +65,7 @@ export default function App() {
       return;
     }
 
-    if (operacao == 'Incluir') {
+    if (operacao === 'Incluir') {
 
       db.transaction(
         tx => {
@@ -85,11 +85,11 @@ export default function App() {
         }
       );
 
-    } else if (operacao == 'Editar') {
+    } else if (operacao === 'Editar') {
       db.transaction(
         tx => { 
           tx.executeSql(
-            'INSERT INTO clientes (nome) VALUES (?)',
+            'UPDATE clientes SET nome=? WHERE id=?;',
             [inputText],
             (_, { rowsAffected }) => {
               console.log(rowsAffected);
@@ -97,8 +97,8 @@ export default function App() {
               atualizaRegistros();
             },
             (_, error) => {
-              console.error('Erro ao adicionar cliente:', error);
-              Alert.alert('Erro', 'Ocorreu um erro ao adicionar o cliente.');
+              console.error('Erro ao atualizar cliente:', error);
+              Alert.alert('Erro', 'Ocorreu um erro ao atualizar o cliente.');
             }
           );
         }
