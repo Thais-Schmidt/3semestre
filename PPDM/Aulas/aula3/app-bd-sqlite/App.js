@@ -27,7 +27,7 @@ export default function App() {
         (_, error) => console.error(error) //retorno de  erro
       );
     }, null);
-  }, []);
+  }, [todos]);
 
   /**
    * Função utilizada para atualizar os registros
@@ -48,7 +48,7 @@ export default function App() {
   };
 
   /**
-   * useEffect que chama a função para atualizar os registros
+   * useEffect que chama a função para atualizar os registros 
    */
   useEffect(() => {
     atualizaRegistros();
@@ -87,14 +87,20 @@ export default function App() {
 
     } else if (operacao === 'Editar') {
       db.transaction(
-        tx => { 
+        tx => {
           tx.executeSql(
             'UPDATE clientes SET nome=? WHERE id=?;',
-            [inputText],
+            [inputText, id],
             (_, { rowsAffected }) => {
-              console.log(rowsAffected);
+              //console.log(res);
+              if (rowsAffected === 1)
+                Alert.alert('Sucesso', 'registro alterado com sucesso');
+              else if (rowsAffected === 0)
+                Alert.alert('Alerta', 'o registro nao foi localizado.');
+
               setInputText('');
               atualizaRegistros();
+              setOperacao('Incluir');
             },
             (_, error) => {
               console.error('Erro ao atualizar cliente:', error);
@@ -104,7 +110,6 @@ export default function App() {
         }
       );
     }
-
 
   };
 
@@ -142,6 +147,35 @@ export default function App() {
 
   }
 
+  /**
+   * Função para excluir tabelas e banco
+   */
+
+  const deleteDatabase = () => {
+    db.transaction(tx => {
+      tx.executeSql(
+        "SELECT name FROM sqlite_master WHERE type= 'table' AND name NOT LIKE 'sqlite_%'",
+        [],
+        (_, { rows }) => {
+          rows._array.forEach(table => {
+            tx.executeSql(
+              `DROP TABLE IF EXISTS ${table.name}`,
+              [],
+              () => {
+                console.log(`Tabela ${table.name} foi excluida com sucesso!`);
+                setTodos([]);
+              },
+              (_, error) => {
+                console.error(`Erro ao excluir tabela ${table.name}`, error);
+                Alert.alert('Erro', `Ocorreu um erro ao excluir a tabela ${table.name}`)
+
+              }
+            )
+          })
+        }
+      )
+    })
+  }
 
   return (
     <SafeAreaProvider>
@@ -154,7 +188,7 @@ export default function App() {
             onChangeText={setInputText}
             placeholder="Digite um novo cliente"
           />
-          <Button title="Adicionar" onPress={incluiCliente} />
+          <Button title={operacao === 'Incluir' ? 'Salvar novo' : 'Salvar'} onPress={incluiCliente} />
 
           <Text style={styles.title}>Clientes Cadastrados</Text>
         </View>
@@ -208,6 +242,30 @@ export default function App() {
           </View>
 
         </ScrollView>
+
+        {/* botão de excluir banco de dados*/}
+        <TouchableOpacity title="ExcluirBanco" onPress={() => {
+                    Alert.alert(
+                      "Atenção!",
+                      'Deseja excluir o banco de dados?',
+                      [
+                        {
+                          text: 'OK',
+                          onPress: () => { deleteDatabase() }
+                        },
+                        {
+                          text: 'Cancelar',
+                          onPress: () => { return }
+                        }
+                      ],
+                    )
+
+                  }} >
+
+                    {/* icone de lixeira */}
+                    <FontAwesome6 name='eraser' color='darkblue' size={44} />
+
+                  </TouchableOpacity>
 
 
       </SafeAreaView>
