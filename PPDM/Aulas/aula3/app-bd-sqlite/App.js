@@ -1,165 +1,266 @@
-import { StatusBar } from 'expo-status-bar';
-import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, TextInput, Alert } from 'react-native';
-import { DatabaseConnection } from './src/database/database'; //importando o banco de dados do arquivo database.js
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, Button, TextInput, Alert, SafeAreaView, Platform, ScrollView, TouchableOpacity } from 'react-native';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+import { DatabaseConnection } from './src/database/database'
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 
-const db = new DatabaseConnection.getConnection; //quando chama o getConnection ele chama a instrução dentro da função 
+// Abra ou crie o banco de dados SQLite
+const db = new DatabaseConnection.getConnection; // 
 
 export default function App() {
+  const [todos, setTodos] = useState([]);
+  const [inputText, setInputText] = useState('');
+  const [operacao, setOperacao] = useState('Incluir');
+  const [id, setId] = useState(null);
 
-  const [nome, setNome] = useState(null);
-  const [registros, setRegistros] = useState([]);
-
+  /**
+   * Função dentro do useEffect que cria a tabela caso ela não exista
+   */
   useEffect(() => {
     db.transaction(tx => {
-      tx.executeSql('CREATE TABLE IF NOT EXISTS clientes (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT)',
-        [],
-        () => console.log('Tabela clientes criada com sucesso!'),
-        (_, error) => console.error(error) //utiliza-se o underline, quando não se quer pegar o retorno da função. Quando querer exibir o retorno, é só trocar o underline por algum "texto" e acrescentar no outro paranteses
+      tx.executeSql(
+        'CREATE TABLE IF NOT EXISTS clientes (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT NOT NULL)',
+        [], //[]: Este é o array de parâmetros. Como não estamos usando nenhum parâmetro na consulta SQL, deixamos esse array vazio.
+        () => console.log('Tabela criada com sucesso'),//retorno de  sucesso
+        // '_' É um parâmetro que representa o resultado da transação SQL, por convenção utiliza-se o underscore. para indicar que estamos ignorando esse valor.
+        (_, error) => console.error(error) //retorno de  erro
       );
-    });
+    }, null);
   }, []);
 
-  const deletarCliente = (id) => {
-    db.transaction(tx => {
-      tx.executeSql('DELETE FROM clientes WHERE id=?;',
-        [id],
-        (_, { rowsAffected }) => {
-          if (rowsAffected > 0) {
-            atualizaLista();
-            Alert.alert('Info', 'Registro excluido com sucesso!')
-          } else {
-            Alert.alert('Erro', 'Registro não excluido, verifique e tente novamente')
-          }
-        },
-        (_, error) => {
-          console.error('Erro ao excluir registro', error);
-        }
-      )
-    })
-  }
+  /**
+   * Função utilizada para atualizar os registros
+   */
+  const atualizaRegistros = () => {
+    try {
+      db.transaction(tx => {
+        tx.executeSql('SELECT * FROM clientes',
+          //'_array' é uma propriedade do objeto rows retornado pela consulta SQL, em rows._array, o '_' não se refere diretamente a rows, mas sim ao objeto retornado pela transação SQL. 
+          [], (_, { rows }) =>
+          // O '_array' é uma propriedade desse objeto que contém os resultados da consulta em forma de array.
+          setTodos(rows._array),
+        );
+      });
+    } catch (error) {
+      console.error('Erro ao buscar todos:', error);
+    }
+  };
 
-  const adicionarCliente = () => {
-    if (nome === null || nome.trim() === '') {
-      Alert.alert('Erro', 'Insira um valor válido para o nome.');
+  /**
+   * useEffect que chama a função para atualizar os registros
+   */
+  useEffect(() => {
+    atualizaRegistros();
+  }, []);
+
+  /**
+   * Função utilizada inserir um novo registro
+   */
+  const incluiCliente = () => {
+
+    if (inputText.trim() === '') {
+
+      Alert.alert('Erro', 'Por favor, insira um texto válido para adicionar o cliente');
       return;
     }
 
+    if (operacao == 'Incluir') {
+
+      db.transaction(
+        tx => {
+          tx.executeSql(
+            'INSERT INTO clientes (nome) VALUES (?)',
+            [inputText],
+            (_, { rowsAffected }) => {
+              console.log(rowsAffected);
+              setInputText('');
+              atualizaRegistros();
+            },
+            (_, error) => {
+              console.error('Erro ao adicionar cliente:', error);
+              Alert.alert('Erro', 'Ocorreu um erro ao adicionar o cliente.');
+            }
+          );
+        }
+      );
+
+    } else if (operacao == 'Editar') {
+      db.transaction(
+        tx => { 
+          tx.executeSql(
+            'INSERT INTO clientes (nome) VALUES (?)',
+            [inputText],
+            (_, { rowsAffected }) => {
+              console.log(rowsAffected);
+              setInputText('');
+              atualizaRegistros();
+            },
+            (_, error) => {
+              console.error('Erro ao adicionar cliente:', error);
+              Alert.alert('Erro', 'Ocorreu um erro ao adicionar o cliente.');
+            }
+          );
+        }
+      );
+    }
+
+
+  };
+
+  /**
+   * Função utilizada deletar registro
+   */
+
+  const excluiCliente = (id) => {
     db.transaction(tx => {
-      tx.executeSql('INSERT INTO clientes(nome) VALUES (?)',
-        [nome],
-        (_,) => {
-          Alert.alert('Info', 'Registro inserido com sucesso!');
-          setNome('');
-          atualizaLista();
+      tx.executeSql('DELETE FROM clientes WHERE id=?',
+        [id],
+        (_, { rowsAffected }) => {
+          if (rowsAffected > 0) {
+            atualizaRegistros();
+            Alert.alert('Sucesso', 'Registro excluido com sucesso!')
+          } else {
+            Alert.alert('Erro', 'Registro não excluido, verifique e tente novamente!')
+          }
         },
         (_, error) => {
-          console.error('Erro ao adicionar cliente', error);
-          Alert.alert('Erro', 'Ocorreu um erro ao adicionar o cliente');
+          console.error('Erro ao excluir cliente', error);
+          Alert.alert('Erro', 'Ocorreu um erro ao excluir o cliente!')
         }
-      );
-    });
+      )
+    }
+    )
   }
 
-  const atualizaLista = () => {
-    db.transaction(tx => {
-      tx.executeSql('SELECT * FROM clientes;',
-        [],
-        (_, { rows }) => {
-          setRegistros(rows._array)
-        }
-      );
-    })
-  }
+  /**
+   * Função utilizada editar um registro pelo ID
+   */
 
-  useEffect(() => {
-    atualizaLista();
-  }, [])
+  const buttonPress = (nome) => {
+    setInputText(nome);
+
+  }
 
 
   return (
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.androidSafeArea}>
+        <View style={styles.container}>
 
-    <View style={styles.container}>
+          <TextInput
+            style={styles.input}
+            value={inputText}
+            onChangeText={setInputText}
+            placeholder="Digite um novo cliente"
+          />
+          <Button title="Adicionar" onPress={incluiCliente} />
 
-      <Text style={styles.title}> Cadastro:</Text>
-
-      <TextInput
-        style={styles.input}
-        value={nome}
-        onChangeText={setNome}
-        placeholder='Digite um nome'
-      />
-
-      <Button
-        title='Adicionar'
-        onPress={adicionarCliente}
-      />
-
-      {registros.map(item => (
-        <View key={item.id} style={styles.alinhar}>
-
-          <Text style={styles.boxtext} >{item.id}</Text>
-          <Text style={styles.boxtext2}>{item.nome}</Text>
-          <Button title='Deletar' onPress={() => deletarCliente(item.id)} />
-
+          <Text style={styles.title}>Clientes Cadastrados</Text>
         </View>
 
-      ))}
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          <View style={styles.containerScroll}>
+            {/* A propriedade key é usada pelo React para identificar de forma única cada elemento na lista, o que é crucial para que o React possa otimizar a renderização e o desempenho. */}
+            {todos.map(cliente => (
+              <View key={cliente.id} style={styles.clienteItem}>
+                <Text>{cliente.id}</Text>
+                <Text>{cliente.nome}</Text>
 
-      <StatusBar style="auto" />
+                <View style={styles.buttonTable}>
 
-    </View>
+                  {/* botão de editar */}
+                  <TouchableOpacity title="Editar" onPress={() => {
+                    buttonPress(cliente.nome), setId(cliente.id), setOperacao('Editar')
+                  }}>
+                    {/* icone de editar */}
+                    <FontAwesome6 name='edit' color='darkblue' size={24} />
 
+                  </TouchableOpacity>
+
+                  {/* botão de excluir*/}
+                  <TouchableOpacity title="Excluir" onPress={() => {
+                    Alert.alert(
+                      "Atenção!",
+                      'Deseja excluir o registro selecionado?',
+                      [
+                        {
+                          text: 'OK',
+                          onPress: () => excluiCliente(cliente.id)
+                        },
+                        {
+                          text: 'Cancelar',
+                          onPress: () => { return }
+                        }
+                      ],
+                    )
+
+                  }} >
+
+                    {/* icone de lixeira */}
+                    <FontAwesome6 name='trash-can' color='darkblue' size={24} />
+
+                  </TouchableOpacity>
+
+                </View>
+              </View>
+            ))}
+          </View>
+
+        </ScrollView>
+
+
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
+
+/**
+ * Estilização dos componentes
+ */
 const styles = StyleSheet.create({
-  container: {
+  androidSafeArea: {
     flex: 1,
-    backgroundColor: '#2e86ab',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 898,
+    paddingTop: Platform.OS === 'android' ? getStatusBarHeight() : 0,
+    marginTop: 10
+  },
+  container: {
+    width: '100%',
+    backgroundColor: '#fff',
+    padding: 20,
+    gap: 10
+  },
+  containerScroll: {
+    width: '100%',
+    backgroundColor: '#fff',
+    padding: 20,
+    gap: 5
   },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
-    color: '#f4f4f9'
+  },
+  clienteItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 5,
   },
   input: {
-    width: '70%',
-    height: 40,
-    marginBottom: 20,
-    borderRadius: 10,
-    borderColor: 'white',
-    padding: 10,
+    width: '100%',
     borderWidth: 1,
-    backgroundColor: 'white'
+    borderColor: '#ccc',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
   },
-  alinhar: {
+  buttonTable: {
     display: 'flex',
     flexDirection: 'row',
-    gap: 10,
-    marginTop: 10
-  },
-  boxtext: {
-    width: 30,
-    backgroundColor: 'white',
-    marginBottom: 5,
-    textAlign: 'center',
-    borderRadius: 3,
-    fontSize: 17
-  },
-  boxtext2: {
-    width: 150,
-    backgroundColor: 'white',
-    marginBottom: 5,
-    textAlign: 'justify',
-    paddingLeft: 10,
-    borderRadius: 3,
-    fontSize: 17,
-    justifyContent: 'center',
-    alignItems: 'center'
+    gap: 10
   }
 });
+
+
